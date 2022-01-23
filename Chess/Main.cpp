@@ -17,7 +17,10 @@ int main() {
 			system("pause");
 			return 0;
 		case 1:
-			Layout();
+			Layout(0);
+			break;
+		case 2:
+			Layout(1);
 			break;
 		default:
 			cout << "请输入正确的选项！" << endl;

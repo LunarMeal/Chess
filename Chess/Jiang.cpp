@@ -1,4 +1,5 @@
 #include "Jiang.h"
+#include "Layout.h"
 Jiang::Jiang(int camp) {
 	if (camp == 0) {
 		m_p = Point(5, 1);
@@ -6,6 +7,17 @@ Jiang::Jiang(int camp) {
 	}
 	if (camp == 1) {
 		m_p = Point(5, 10);
+		m_Name = "帅";
+	}
+	m_Camp = camp;
+}
+Jiang::Jiang(int camp,int x,int y) {
+	if (camp == 0) {
+		m_p = Point(x, y);
+		m_Name = "将";
+	}
+	if (camp == 1) {
+		m_p = Point(x, y);
 		m_Name = "帅";
 	}
 	m_Camp = camp;
@@ -222,4 +234,316 @@ bool Jiang::chooseRoad(int offset_y) {
 	}
 	cout << "非法走棋！请重新输入" << endl;
 	goto retry1;
+}
+bool Jiang::isJiang() {
+	vector<string> j_chess;
+	vector<int> bj_chess;
+	vector<int> mj_chess;
+	if (m_Camp == 1) {
+		if (isFaced() != 0) {
+			//判断是否对将
+			j_chess.push_back("将");
+		}
+		//判断是否被卒将
+		bj_chess.push_back(isHasChess(m_p.m_x + 1, m_p.m_y));
+		bj_chess.push_back(isHasChess(m_p.m_x - 1, m_p.m_y));
+		bj_chess.push_back(isHasChess(m_p.m_x, m_p.m_y - 1));
+		for (int i = 0; i < 3; i++) {
+			if (bj_chess[i] != -1) {
+				if (d[bj_chess[i]]->m_Name == "卒") {
+					j_chess.push_back("卒");
+				}
+			}
+		}
+		//===================================================//
+		//判断是否被马将
+		if (!(Point(m_p.m_x + 2, m_p.m_y + 1).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x + 2, m_p.m_y + 1));
+		}
+		if (!(Point(m_p.m_x + 2, m_p.m_y - 1).isOutRange())){
+			mj_chess.push_back(isHasChess(m_p.m_x + 2, m_p.m_y - 1));
+		}
+		if (!(Point(m_p.m_x - 2, m_p.m_y + 1).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x - 2, m_p.m_y + 1));
+		}
+		if (!(Point(m_p.m_x - 2, m_p.m_y - 1).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x - 2, m_p.m_y - 1));
+		}
+		if (!(Point(m_p.m_x + 1, m_p.m_y + 2).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x + 1, m_p.m_y + 2));
+		}
+		if (!(Point(m_p.m_x + 1, m_p.m_y - 2).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x + 1, m_p.m_y - 2));
+		}
+		if (!(Point(m_p.m_x - 1, m_p.m_y + 2).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x - 1, m_p.m_y + 2));
+		}
+		if (!(Point(m_p.m_x - 1, m_p.m_y - 2).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x - 1, m_p.m_y - 2));
+		}
+		for (int i = 0; i < mj_chess.size(); i++) {
+			if (mj_chess[i] != -1) {
+				if (d[mj_chess[i]]->m_Name == "马") {
+					if (!(d[mj_chess[i]]->isBlock(m_p.m_x, m_p.m_y))) {
+						j_chess.push_back("马");
+					}
+				}
+			}
+		}
+		//===================================================//
+		//判断是否被车将，四个方向全做判断
+		deque<Chess*> temp;
+		int flag;
+		for (int i = 0; i < d.size(); i++) {
+			if (d[i]->getPos().m_y == this->m_p.m_y || d[i]->getPos().m_x == this->m_p.m_x)
+				if (!(d[i]->isDead))
+					temp.push_back(d[i]);
+		}
+		flag = 0;
+		for (int x = m_p.m_x - 1; x > 0; x--) {
+			for (int j = 0; j < temp.size(); j++) {
+				if (flag == 1) {
+					if (x == temp[j]->getPos().m_x) {
+						flag++;
+						if (temp[j]->m_Name == "炮") {
+							j_chess.push_back("炮");
+						}
+					}
+				}
+				if (flag == 0) {
+					if (x == temp[j]->getPos().m_x) {
+						flag++;
+						if (temp[j]->m_Name == "车") {
+							j_chess.push_back("车");
+						}
+					}
+				}
+			}
+		}
+		flag = 0;
+		for (int x = m_p.m_x + 1; x < 10; x++) {
+			for (int j = 0; j < temp.size(); j++) {
+				if (flag == 1) {
+					if (x == temp[j]->getPos().m_x) {
+						flag++;
+						if (temp[j]->m_Name == "炮") {
+							j_chess.push_back("炮");
+						}
+					}
+				}
+				if (flag == 0) {
+					if (x == temp[j]->getPos().m_x) {
+						flag++;
+						if (temp[j]->m_Name == "车") {
+							j_chess.push_back("车");
+						}
+					}
+				}
+			}
+		}
+		flag = 0;
+		for (int y = m_p.m_y - 1; y > 0; y--) {
+			for (int j = 0; j < temp.size(); j++) {
+				if (flag == 1) {
+					if (y == temp[j]->getPos().m_y) {
+						flag++;
+						if (temp[j]->m_Name == "炮") {
+							j_chess.push_back("炮");
+						}
+					}
+				}
+				if (flag == 0) {
+					if (y == temp[j]->getPos().m_y) {
+						flag ++;
+						if (temp[j]->m_Name == "车") {
+							j_chess.push_back("车");
+						}
+					}
+				}
+			}
+		}
+		flag = 0;
+		for (int y = m_p.m_y + 1; y < 11; y++) {
+			for (int j = 0; j < temp.size(); j++) {
+				if (flag == 1) {
+					if (y == temp[j]->getPos().m_y) {
+						flag++;
+						if (temp[j]->m_Name == "炮") {
+							j_chess.push_back("炮");
+						}
+					}
+				}
+				if (flag == 0) {
+					if (y == temp[j]->getPos().m_y) {
+						flag++;
+						if (temp[j]->m_Name == "车") {
+							j_chess.push_back("车");
+						}
+					}
+				}
+			}
+		}
+		//===================================================//
+	}
+	if (m_Camp == 0) {
+		if (isFaced() != 0) {
+			//判断是否对将
+			j_chess.push_back("帅");
+
+		}
+		//判断是否被卒将
+		bj_chess.push_back(isHasChess(m_p.m_x + 1, m_p.m_y));
+		bj_chess.push_back(isHasChess(m_p.m_x - 1, m_p.m_y));
+		bj_chess.push_back(isHasChess(m_p.m_x, m_p.m_y + 1));
+		for (int i = 0; i < 3; i++) {
+			if (bj_chess[i] != -1) {
+				if (d[bj_chess[i]]->m_Name == "兵") {
+					j_chess.push_back("兵");
+				}
+			}
+		}
+		//===================================================//
+		//判断是否被马将
+		if (!(Point(m_p.m_x + 2, m_p.m_y + 1).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x + 2, m_p.m_y + 1));
+		}
+		if (!(Point(m_p.m_x + 2, m_p.m_y - 1).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x + 2, m_p.m_y - 1));
+		}
+		if (!(Point(m_p.m_x - 2, m_p.m_y + 1).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x - 2, m_p.m_y + 1));
+		}
+		if (!(Point(m_p.m_x - 2, m_p.m_y - 1).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x - 2, m_p.m_y - 1));
+		}
+		if (!(Point(m_p.m_x + 1, m_p.m_y + 2).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x + 1, m_p.m_y + 2));
+		}
+		if (!(Point(m_p.m_x + 1, m_p.m_y - 2).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x + 1, m_p.m_y - 2));
+		}
+		if (!(Point(m_p.m_x - 1, m_p.m_y + 2).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x - 1, m_p.m_y + 2));
+		}
+		if (!(Point(m_p.m_x - 1, m_p.m_y - 2).isOutRange())) {
+			mj_chess.push_back(isHasChess(m_p.m_x - 1, m_p.m_y - 2));
+		}
+		for (int i = 0; i < mj_chess.size(); i++) {
+			if (mj_chess[i] != -1) {
+				if (d[mj_chess[i]]->m_Name == "馬") {
+					if (!(d[mj_chess[i]]->isBlock(m_p.m_x, m_p.m_y))) {
+						j_chess.push_back("馬");
+					}
+				}
+			}
+		}
+		//===================================================//
+		//判断是否被车砲将，四个方向全做判断
+		deque<Chess*> temp;
+		int flag;
+		for (int i = 0; i < d.size(); i++) {
+			if (d[i]->getPos().m_y == this->m_p.m_y || d[i]->getPos().m_x == this->m_p.m_x)
+				if (!(d[i]->isDead))
+					temp.push_back(d[i]);
+		}
+		flag = 0;
+		for (int x = m_p.m_x - 1; x > 0; x--) {
+			for (int j = 0; j < temp.size(); j++) {
+				if (flag == 1) {
+					if (x == temp[j]->getPos().m_x) {
+						flag++;
+						if (temp[j]->m_Name == "砲") {
+							j_chess.push_back("砲");
+						}
+					}
+				}
+				if (flag == 0) {
+					if (x == temp[j]->getPos().m_x) {
+						flag++;
+						if (temp[j]->m_Name == "車") {
+							j_chess.push_back("車");
+						}
+					}
+				}
+			}
+		}
+		flag = 0;
+		for (int x = m_p.m_x + 1; x < 10; x++) {
+			for (int j = 0; j < temp.size(); j++) {
+				if (flag == 1) {
+					if (x == temp[j]->getPos().m_x) {
+						flag++;
+						if (temp[j]->m_Name == "砲") {
+							j_chess.push_back("砲");
+						}
+					}
+				}
+				if (flag == 0) {
+					if (x == temp[j]->getPos().m_x) {
+						flag++;
+						if (temp[j]->m_Name == "車") {
+							j_chess.push_back("車");
+						}
+					}
+				}
+			}
+		}
+		flag = 0;
+		for (int y = m_p.m_y - 1; y > 0; y--) {
+			for (int j = 0; j < temp.size(); j++) {
+				if (flag == 1) {
+					if (y == temp[j]->getPos().m_y) {
+						flag++;
+						if (temp[j]->m_Name == "砲") {
+							j_chess.push_back("砲");
+						}
+					}
+				}
+				if (flag == 0) {
+					if (y == temp[j]->getPos().m_y) {
+						flag++;
+						if (temp[j]->m_Name == "車") {
+							j_chess.push_back("車");
+						}
+					}
+				}
+			}
+		}
+		flag = 0;
+		for (int y = m_p.m_y + 1; y < 11; y++) {
+			for (int j = 0; j < temp.size(); j++) {
+				if (flag == 1) {
+					if (y == temp[j]->getPos().m_y) {
+						flag++;
+						if (temp[j]->m_Name == "砲") {
+							j_chess.push_back("砲");
+						}
+					}
+				}
+				if (flag == 0) {
+					if (y == temp[j]->getPos().m_y) {
+						flag++;
+						if (temp[j]->m_Name == "車") {
+							j_chess.push_back("車");
+						}
+					}
+				}
+			}
+		}
+		//===================================================//
+	}
+	
+
+
+	//==================================================//
+	if (!(j_chess.empty())) {
+		color(FOREGROUND_RED);
+		cout << "您正在被将军，请应将，将军的棋子有：";
+		for (int i = 0; i < j_chess.size(); i++) {
+			cout << j_chess[i] << " ";
+		}
+		color(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		cout << endl;
+		return true;
+	}
 }

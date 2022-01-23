@@ -10,6 +10,17 @@ Xiang::Xiang(int camp, int x) {
 	}
 	m_Camp = camp;
 }
+Xiang::Xiang(int camp, int x, int y) {
+	if (camp == 0) {
+		m_p = Point(x, y);
+		m_Name = "œÛ";
+	}
+	if (camp == 1) {
+		m_p = Point(x, y);
+		m_Name = "œ‡";
+	}
+	m_Camp = camp;
+}
 bool Xiang::walkRule(int offset_x, int offset_y) {
 	Point next(m_p.m_x + offset_x, m_p.m_y + offset_y);
 	int index = isHasChess(next.m_x, next.m_y);

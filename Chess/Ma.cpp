@@ -10,6 +10,17 @@ Ma::Ma(int camp, int x) {
 	}
 	m_Camp = camp;
 }
+Ma::Ma(int camp, int x, int y) {
+	if (camp == 0) {
+		m_p = Point(x, y);
+		m_Name = "Âí";
+	}
+	if (camp == 1) {
+		m_p = Point(x, y);
+		m_Name = "ñR";
+	}
+	m_Camp = camp;
+}
 bool Ma::walkRule(int offset_x, int offset_y) {
 	Point next(m_p.m_x + offset_x, m_p.m_y + offset_y);
 	int index = isHasChess(next.m_x, next.m_y);

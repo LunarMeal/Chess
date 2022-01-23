@@ -1,5 +1,7 @@
 #pragma once
 #include <deque>
+#include <fstream>
+#include <string>
 #include "Chess.h"
 #define LINE "—"
 #define VLINE "| "
@@ -8,15 +10,17 @@
 #define BSLASH "\\ "
 #define BSLASH "\\ "
 #define NODE "+ "
+#define PATH "./lib/chess.txt"
 
 void color(int a);
-void Layout();
+void Layout(int mode);
 void Board();
 void Check();
 string spSign(int x,int y);
 int selectChess();
 int selectChess(deque<int>);
 deque<Chess*> InitChess();
+deque<Chess*> CustomChess();
 
 /*
     原始局面

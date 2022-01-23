@@ -10,6 +10,17 @@ Shi::Shi(int camp, int x) {
 	}
 	m_Camp = camp;
 }
+Shi::Shi(int camp, int x, int y) {
+	if (camp == 0) {
+		m_p = Point(x, y);
+		m_Name = " ø";
+	}
+	if (camp == 1) {
+		m_p = Point(x, y);
+		m_Name = " À";
+	}
+	m_Camp = camp;
+}
 bool Shi::walkRule(int offset_x, int offset_y) {
 	Point next(m_p.m_x + offset_x, m_p.m_y + offset_y);
 	int index = isHasChess(next.m_x, next.m_y);

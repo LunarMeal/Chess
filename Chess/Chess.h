@@ -3,6 +3,7 @@
 #include "Point.h"
 #include "conio.h"
 #include <deque>
+#include <vector>
 #include <Windows.h>
 #include <iostream>
 #include <cmath>
@@ -31,7 +32,9 @@ public:
 	string yNumToChar(unsigned int num);
 	virtual bool walkRule(int offset_x, int offset_y)=0;
 	virtual bool findRoad()=0;
+	virtual bool isBlock(int x, int y) = 0;
 	bool move(int offset_x, int offset_y);
+	virtual bool isJiang() = 0;
 	void beEaten();
 };
 
