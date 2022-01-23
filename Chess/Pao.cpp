@@ -1,4 +1,5 @@
 #include "Pao.h"
+extern stack<int> deathChess;
 Pao::Pao(int camp, int x) {
 	if (camp == 0) {
 		m_p = Point(x, 3);
@@ -117,6 +118,7 @@ bool Pao::findRoad() {
 			if (KEY_DOWN('Y')) {
 				//完成
 				if (m_p != mp_temp) {
+					deathChess.push(-1);
 					mp_temp = m_p;
 					return true;
 				}
@@ -217,6 +219,7 @@ bool Pao::findRoad() {
 			if (KEY_DOWN('Y')) {
 				//完成
 				if (m_p != mp_temp) {
+					deathChess.push(-1);
 					mp_temp = m_p;
 					return true;
 				}

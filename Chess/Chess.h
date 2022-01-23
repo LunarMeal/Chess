@@ -4,6 +4,7 @@
 #include "conio.h"
 #include <deque>
 #include <vector>
+#include <stack>
 #include <Windows.h>
 #include <iostream>
 #include <cmath>
@@ -13,6 +14,7 @@ class Chess
 {
 protected:
 	Point m_p;
+	Point mp_temp;
 public:
 	static deque<Chess*> d;
 	static int bound;
@@ -27,6 +29,7 @@ public:
 	Chess();
 	~Chess();
 	Point getPos()const;
+	void setPos(int x,int y);
 	string xNumToChar();
 	string xNumToChar(unsigned int num);
 	string yNumToChar(unsigned int num);

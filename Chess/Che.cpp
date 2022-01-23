@@ -1,4 +1,5 @@
 #include "Che.h"
+extern stack<int> deathChess;
 Che::Che(int camp, int x) {
 	if (camp == 0) {
 		m_p = Point(x, 1);
@@ -118,6 +119,7 @@ bool Che::findRoad() {
 			if (KEY_DOWN('Y')) {
 				//完成
 				if (m_p != mp_temp) {
+					deathChess.push(-1);
 					mp_temp = m_p;
 					return true;
 				}
@@ -205,6 +207,7 @@ bool Che::findRoad() {
 			if (KEY_DOWN('Y')) {
 				//完成
 				if (m_p != mp_temp) {
+					deathChess.push(-1);
 					mp_temp = m_p;
 					return true;
 				}

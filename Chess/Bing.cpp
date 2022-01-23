@@ -1,4 +1,5 @@
 #include "Bing.h"
+extern stack<int> deathChess;
 Bing::Bing(int camp,int x) {
 	if (camp == 0) {
 		m_p = Point(x, 4);
@@ -88,21 +89,24 @@ retry1:
 		{
 		case 1: {
 			if (walkRule(1, 0) && m_p.isOutRange(1, 6, 9, 10)) {
-				this->move(1, 0);
+				if(!this->move(1, 0))
+					deathChess.push(-1);
 				return true;
 			}
 		}
 			  break;
 		case 2: {
 			if (walkRule(-1, 0) && m_p.isOutRange(1, 6, 9, 10)) {
-				this->move(-1, 0);
+				if(!this->move(-1, 0))
+					deathChess.push(-1);
 				return true;
 			}
 		}
 			  break;
 		case 3: {
 			if (walkRule(0, -1)) {
-				this->move(0, -1);
+				if(!this->move(0, -1))
+					deathChess.push(-1);
 				return true;
 			}
 		}
@@ -120,21 +124,24 @@ retry1:
 		{
 		case 1: {
 			if (walkRule(1, 0) && m_p.isOutRange(1, 1, 9, 5)) {
-				this->move(1, 0);
+				if (!this->move(1, 0))
+					deathChess.push(-1);
 				return true;
 			}
 		}
 			  break;
 		case 2: {
 			if (walkRule(-1, 0) && m_p.isOutRange(1, 1, 9, 5)) {
-				this->move(-1, 0);
+				if (!this->move(-1, 0))
+					deathChess.push(-1);
 				return true;
 			}
 		}
 			  break;
 		case 3: {
 			if (walkRule(0, 1)) {
-				this->move(0, 1);
+				if (!this->move(0, 1))
+					deathChess.push(-1);
 				return true;
 			}
 		}

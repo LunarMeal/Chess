@@ -1,4 +1,5 @@
 #include "Ma.h"
+extern stack<int> deathChess;
 Ma::Ma(int camp, int x) {
 	if (camp == 0) {
 		m_p = Point(x, 1);
@@ -120,56 +121,64 @@ retry:
 	{
 	case 1: {
 		if (walkRule(1, 2)) {
-			this->move(1, 2);
+			if(!this->move(1, 2))
+				deathChess.push(-1);
 			return true;
 		}
 	}
 		  break;
 	case 2: {
 		if (walkRule(-1, 2)) {
-			this->move(-1, 2);
+			if(!this->move(-1, 2))
+				deathChess.push(-1);
 			return true;
 		}
 	}
 		  break;
 	case 3: {
 		if (walkRule(2, 1)) {
-			this->move(2, 1);
+			if(!this->move(2, 1))
+				deathChess.push(-1);
 			return true;
 		}
 	}
 		  break;
 	case 4: {
 		if (walkRule(-2, 1)) {
-			this->move(-2, 1);
+			if(!this->move(-2, 1))
+				deathChess.push(-1);
 			return true;
 		}
 	}
 		  break;
 	case 5: {
 		if (walkRule(1, -2)) {
-			this->move(1, -2);
+			if(!this->move(1, -2))
+				deathChess.push(-1);
 			return true;
 		}
 	}
 		  break;
 	case 6: {
 		if (walkRule(-1, -2)) {
-			this->move(-1, -2);
+			if(!this->move(-1, -2))
+				deathChess.push(-1);
 			return true;
 		}
 	}
 		  break;
 	case 7: {
 		if (walkRule(2, -1)) {
-			this->move(2, -1);
+			if(!this->move(2, -1))
+				deathChess.push(-1);
 			return true;
 		}
 	}
 		  break;
 	case 8: {
 		if (walkRule(-2, -1)) {
-			this->move(-2, -1);
+			if(!this->move(-2, -1))
+				deathChess.push(-1);
 			return true;
 		}
 	}

@@ -4,7 +4,6 @@ class Che :
     public Chess
 {
 private:
-    Point mp_temp;
     char key;
 public:
     Che(int camp, int x);

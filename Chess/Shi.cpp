@@ -1,4 +1,5 @@
 #include "Shi.h"
+extern stack<int> deathChess;
 Shi::Shi(int camp, int x) {
 	if (camp == 0) {
 		m_p = Point(x, 1);
@@ -94,82 +95,47 @@ bool Shi::findRoad() {
 bool Shi::chooseRoad() {
 	int choose;
 retry:
-	if (m_Camp == 1) {
-		cin >> choose;
-		switch (choose)
-		{
-		case 1: {
-			if (walkRule(1, 1)) {
-				this->move(1, 1);
-				return true;
-			}
-		}
-			  break;
-		case 2: {
-			if (walkRule(-1, 1)) {
-				this->move(-1, 1);
-				return true;
-			}
-		}
-			  break;
-		case 3: {
-			if (walkRule(1, -1)) {
-				this->move(1, -1);
-				return true;
-			}
-		}
-			  break;
-		case 4: {
-			if (walkRule(-1, -1)) {
-				this->move(-1, -1);
-				return true;
-			}
-		}
-			  break;
-		case 0: {
-			return false;
-		}
-		default:
-			break;
+
+	cin >> choose;
+	switch (choose)
+	{
+	case 1: {
+		if (walkRule(1, 1)) {
+			if(!this->move(1, 1))
+				deathChess.push(-1);
+			return true;
 		}
 	}
-	if (m_Camp == 0) {
-		cin >> choose;
-		switch (choose)
-		{
-		case 1: {
-			if (walkRule(1, 1)) {
-				this->move(1, 1);
-				return true;
-			}
+		  break;
+	case 2: {
+		if (walkRule(-1, 1)) {
+			if(!this->move(-1, 1))
+				deathChess.push(-1);
+			return true;
 		}
-			  break;
-		case 2: {
-			if (walkRule(-1, 1)) {
-				this->move(-1, 1);
-				return true;
-			}
+	}
+		  break;
+	case 3: {
+		if (walkRule(1, -1)) {
+			if(!this->move(1, -1))
+				deathChess.push(-1);
+			return true;
 		}
-			  break;
-		case 3: {
-			if (walkRule(1, -1)) {
-				this->move(1, -1);
-				return true;
-			}
+	}
+		  break;
+	case 4: {
+		if (walkRule(-1, -1)) {
+			if(!this->move(-1, -1))
+				deathChess.push(-1);
+			return true;
 		}
-		case 4: {
-			if (walkRule(-1, -1)) {
-				this->move(-1, -1);
-				return true;
-			}
-		}
-			  break;
-		case 0: {
-			return false;
-		}
-		default:
-			break;
-		}
+	}
+		  break;
+	case 0: {
+		return false;
+	}
+	default:
+		break;
 	}
 	cout << "非法走棋！请重新输入" << endl;
 	goto retry;

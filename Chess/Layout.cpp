@@ -8,7 +8,10 @@
 //6.先判断棋子当前状态，再执行移动
 //7.依次编写每种棋子的走法规则和状态检测
 //8.测试
+//9.附加功能：将军检测与提示、自动判和（双方均无过河子）、悔棋、棋谱导入与导出（自定义棋局）
 deque<Chess*> Chess::d;
+stack<int*> Event;
+stack<int> deathChess;
 int Chess::tail;
 int Chess::bound;
 int tab;
@@ -33,7 +36,7 @@ void Layout(int mode) {
 		}*/
 		Board();
 		int index;
-		if (!isMore)
+		if (!isMore) 
 			index = selectChess();
 		else
 			index = mChessIndex;
@@ -78,7 +81,38 @@ void Layout(int mode) {
 			system("pause");
 			tab = !tab;
 		}
+		else if (index == -4) {
+			//悔棋
+			cout << "是否悔棋（Y.确认/N.取消）？" << endl;
+			char confirm;
+			cin >> confirm;
+			if (confirm == 'Y' || confirm == 'y') {
+				if (Event.size() > 1) {
+					for (int i = 0; i < 2; i++) {
+						Chess::d[Event.top()[0]]->setPos(Event.top()[1], Event.top()[2]);
+						delete[] Event.top();
+						Event.pop();
+						if (!deathChess.empty()) {
+							if (deathChess.top() != -1) {
+								Chess::d[deathChess.top()]->isDead = false;
+							}
+							deathChess.pop();
+						}
+					}
+				}
+				else {
+					cout << "无法悔棋！" << endl;
+					Sleep(1000);
+				}
+			}
+			else {
+				cout << "已取消！" << endl;
+				system("pause");
+			}
+			tab = !tab;
+		}
 		else {
+			
 			if (!(Chess::d[index]->findRoad())) {
 				//循环
 				if (Chess::d[index]->isMoving) {
@@ -176,6 +210,11 @@ void Layout(int mode) {
 		cout << "已取消！" << endl;
 	}
 	system("pause");
+	while (!Event.empty()) {
+		//释放所有棋谱记录在堆区开辟的空间
+		delete[] Event.top();
+		Event.pop();
+	}
 	for (int i = 0; i < Chess::tail + 1; i++) {
 		//释放所有棋子在堆区开辟的空间
 		delete Chess::d[i];
@@ -293,6 +332,7 @@ deque<Chess*> InitChess() {
 	result = 3;
 	isMore = false;
 	deque<Chess*> Rchess;
+
 	Chess* jiang = new Jiang(0);
 	Chess* shuai = new Jiang(1);
 	//留空===========================留空//
@@ -765,7 +805,7 @@ int selectChess() {
 			}
 		}
 	}
-	cout << " 9. 求和  0.认输）" << endl;
+	cout << "8. 悔棋 9. 求和 0. 认输）" << endl;
 retry:
 	cin >> select;
 	if (cin.fail()) {
@@ -775,8 +815,14 @@ retry:
 	}
 	switch (select)
 	{
-	case 1:
+	case 1: {
+		int* event = new int[3];
+		event[0] = index_j[0];
+		event[1] = Chess::d[index_j[0]]->getPos().m_x;
+		event[2] = Chess::d[index_j[0]]->getPos().m_y ;
+		Event.push(event);
 		return index_j[0];
+	}
 	case 2:
 		if (!(index_b.empty())) {
 			return selectChess(index_b);
@@ -807,6 +853,8 @@ retry:
 		if (!(index_x.empty())) {
 			return selectChess(index_x);
 		}
+	case 8:
+		return -4;
 	case 9:
 		return -1;
 	case 0:
@@ -836,24 +884,54 @@ retry2:
 	cin >> select;
 	switch (select)
 	{
-	case 1:
+	case 1: {
+		int* event = new int[3];
+		event[0] = ds[0];
+		event[1] = Chess::d[ds[0]]->getPos().m_x;
+		event[2] = Chess::d[ds[0]]->getPos().m_y;
+		Event.push(event);
 		return ds[0];
+	}
 		break;
 	case 2:
-		if (select <= num)
+		if (select <= num) {
+			int* event = new int[3];
+			event[0] = ds[1];
+			event[1] = Chess::d[ds[1]]->getPos().m_x;
+			event[2] = Chess::d[ds[1]]->getPos().m_y;
+			Event.push(event);
 			return ds[1];
+		}
 		break;
 	case 3:
-		if (select <= num)
+		if (select <= num) {
+			int* event = new int[3];
+			event[0] = ds[2];
+			event[1] = Chess::d[ds[2]]->getPos().m_x;
+			event[2] = Chess::d[ds[2]]->getPos().m_y;
+			Event.push(event);
 			return ds[2];
+		}
 		break;
 	case 4:
-		if (select <= num)
+		if (select <= num) {
+			int* event = new int[3];
+			event[0] = ds[3];
+			event[1] = Chess::d[ds[3]]->getPos().m_x;
+			event[2] = Chess::d[ds[3]]->getPos().m_y;
+			Event.push(event);
 			return ds[3];
+		}
 		break;
 	case 5:
-		if (select <= num)
+		if (select <= num) {
+			int* event = new int[3];
+			event[0] = ds[4];
+			event[1] = Chess::d[ds[4]]->getPos().m_x;
+			event[2] = Chess::d[ds[4]]->getPos().m_y;
+			Event.push(event);
 			return ds[4];
+		}
 		break;
 	case 0:
 		isMore = false;

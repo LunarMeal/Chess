@@ -1,5 +1,6 @@
 #include "Jiang.h"
 #include "Layout.h"
+extern stack<int> deathChess;
 Jiang::Jiang(int camp) {
 	if (camp == 0) {
 		m_p = Point(5, 1);
@@ -140,97 +141,53 @@ bool Jiang::findRoad() {
 bool Jiang::chooseRoad(int offset_y) {
 	int choose;
 	retry1:
-	if (m_Camp == 1) {
-		cin >> choose;
-		switch (choose)
-		{
-		case 1: {
-			if (walkRule(1, 0)) {
-				this->move(1, 0);
-				return true;
-			}
-		}
-			  break;
-		case 2: {
-			if (walkRule(-1, 0)) {
-				this->move(-1, 0);
-				return true;
-			}
-		}
-			  break;
-		case 3: {
-			if (walkRule(0, -1)) {
-				this->move(0, -1);
-				return true;
-			}
-		}
-			  break;
-		case 4: {
-			if (walkRule(0, 1)) {
-				this->move(0, 1);
-				return true;
-			}
-		}
-			  break;
-		case 5: {
-			if (offset_y != 0) {
-				this->move(0,offset_y);
-				return true;
-			}
-		}
-		case 0: {
-			return false;
-		}
-			  break;
-		default:
-			break;
+	cin >> choose;
+	switch (choose)
+	{
+	case 1: {
+		if (walkRule(1, 0)) {
+			if (!this->move(1, 0))
+				deathChess.push(-1);
+			return true;
 		}
 	}
-	if (m_Camp == 0) {
-		cin >> choose;
-		switch (choose)
-		{
-		case 1: {
-			if (walkRule(1, 0)) {
-				this->move(1, 0);
-				return true;
-			}
+		  break;
+	case 2: {
+		if (walkRule(-1, 0)) {
+			if (!this->move(-1, 0))
+				deathChess.push(-1);
+			return true;
 		}
-			  break;
-		case 2: {
-			if (walkRule(-1, 0)) {
-				this->move(-1, 0);
-				return true;
-			}
+	}
+		  break;
+	case 3: {
+		if (walkRule(0, -1)) {
+			if (!this->move(0, -1))
+				deathChess.push(-1);
+			return true;
 		}
-			  break;
-		case 3: {
-			if (walkRule(0, -1)) {
-				this->move(0, -1);
-				return true;
-			}
+	}
+		  break;
+	case 4: {
+		if (walkRule(0, 1)) {
+			if (!this->move(0, 1))
+				deathChess.push(-1);
+			return true;
 		}
-			  break;
-		case 4: {
-			if (walkRule(0, 1)) {
-				this->move(0, 1);
-				return true;
-			}
+	}
+		  break;
+	case 5: {
+		if (offset_y != 0) {
+			this->move(0, offset_y);
+			return true;
 		}
-			  break;
-		case 5: {
-			if (offset_y != 0) {
-				this->move(0, offset_y);
-				return true;
-			}
-		}
-			  break;
-		case 0: {
-			return false;
-		}
-		default:
-			break;
-		}
+	}
+	case 0: {
+		return false;
+	}
+		  break;
+	default:
+		break;
 	}
 	cout << "非法走棋！请重新输入" << endl;
 	goto retry1;

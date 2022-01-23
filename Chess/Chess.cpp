@@ -1,8 +1,15 @@
 #include "Chess.h"
+extern stack<int> deathChess;
 Chess::Chess():m_p(),isDead(false),isMoving(false){}
 Chess::~Chess(){}
 Point Chess::getPos()const {
 	return m_p;
+}
+void Chess::setPos(int x,int y){
+	m_p.m_x = x;
+	m_p.m_y = y;
+	mp_temp.m_x = x;
+	mp_temp.m_y = y;
 }
 int Chess::isHasChess(int x, int y) {
 	Point p(x, y);
@@ -117,6 +124,7 @@ bool Chess::move(int offset_x, int offset_y) {
 			if (d[index]->m_Camp == 0) {
 				//µĞ·½Æå×Ó×èµ²
 				d[index]->beEaten();
+				deathChess.push(index);
 				return true;
 			}
 		}
@@ -127,6 +135,7 @@ bool Chess::move(int offset_x, int offset_y) {
 			if (d[index]->m_Camp == 1) {
 				//µĞ·½Æå×Ó×èµ²
 				d[index]->beEaten();
+				deathChess.push(index);
 				return true;
 			}
 		}
