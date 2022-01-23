@@ -103,19 +103,23 @@ void Layout(int mode) {
 		}
 		Check();
 		if (result == 0) {
+			color(FOREGROUND_INTENSITY | FOREGROUND_GREEN);
 			cout << "游戏结束，黑胜红负！" << endl;
 			break;
 		}
 		if (result == 1) {
+			color(FOREGROUND_INTENSITY | FOREGROUND_RED);
 			cout << "游戏结束，红胜黑负！" << endl;
 			break;
 		}
 		if (result == 2) {
+			color(FOREGROUND_INTENSITY | FOREGROUND_BLUE);
 			cout << "游戏结束，和棋！" << endl;
 			break;
 		}
 		tab = !tab;
 	}
+	color(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	char c;
 	cout << "是否保存当前棋谱（按Y确认）？" << endl;
 	cin >> c;
@@ -355,11 +359,10 @@ deque<Chess*> CustomChess() {
 			int column = 1;
 			while (buf[i] != '\0') {
 				string s = { buf[i],buf[i + 1]};
-				string che = { -77,-75,32 };
-				if (s != "—") {
-					//忽略分隔符
-					if (buf[i] != '+') {
-						cout << s;
+				if (line / 2 == 5 || line / 2 == 6) {
+					//河界
+					if (s != "—") {
+						//忽略空位置
 						if (s == "帅") {
 							delete Rchess[0];
 							Rchess[0] = new Jiang(1, column, line / 2);
@@ -501,11 +504,167 @@ deque<Chess*> CustomChess() {
 								}
 							}
 						}
-						
 					}
 					column++;
+					if (i != 32) {
+						i += 4;
+					}
+					else {
+						buf[i] = '\0';
+					}
 				}
-				i += 2;
+				else {
+					//非河界
+					if (s != "—") {
+						//忽略分隔符
+						if (buf[i] != '+') {
+							if (s == "帅") {
+								delete Rchess[0];
+								Rchess[0] = new Jiang(1, column, line / 2);
+								Rchess[0]->isDead = false;
+							}
+							if (s == "兵") {
+								for (int i = 1; i < 6; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Bing(1, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "車") {
+								for (int i = 6; i < 8; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Che(1, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "馬") {
+								for (int i = 8; i < 10; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Ma(1, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "砲") {
+								for (int i = 10; i < 12; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Pao(1, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "仕") {
+								for (int i = 12; i < 14; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Shi(1, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "相") {
+								for (int i = 14; i < 16; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Xiang(1, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "将") {
+								delete Rchess[Chess::tail];
+								Rchess[Chess::tail] = new Jiang(0, column, line / 2);
+								Rchess[Chess::tail]->isDead = false;
+							}
+							if (s == "卒") {
+								for (int i = 26; i < 31; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Bing(0, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "车") {
+								for (int i = 24; i < 26; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Che(0, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "马") {
+								for (int i = 22; i < 24; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Ma(0, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "炮") {
+								for (int i = 20; i < 22; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Pao(0, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "士") {
+								for (int i = 18; i < 20; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Shi(0, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+							if (s == "象") {
+								for (int i = 16; i < 18; i++) {
+									if (Rchess[i]->isDead) {
+										delete Rchess[i];
+										Rchess[i] = new Xiang(0, column, line / 2);
+										Rchess[i]->isDead = false;
+										break;
+									}
+								}
+							}
+
+						}
+						column++;
+					}
+					i += 2;
+				}
 			}
 		}
 		line++;
